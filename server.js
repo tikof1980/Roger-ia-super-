@@ -7,7 +7,7 @@ import cors from "cors";
 import { Pool } from "pg";
 import fs from "fs";
 import { randomUUID } from "crypto";
-import config from "./agent_config.json" assert { type: "json" };
+import config from "./agent_config.json" with { type: "json" };
 
 const app = express();
 app.use(cors());
