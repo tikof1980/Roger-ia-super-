@@ -155,14 +155,16 @@ app.post("/api/chat", async (req, res) => {
     }
 
     await pool.query(
+      `INSERT INTO conversations (id, user_id, title)
+       VALUES ($1,$2,$3) ON CONFLICT (id) DO NOTHING`,
+      [conversationId, userId, "Conversation"]
+    );
+
+    await pool.query(
       `INSERT INTO messages (id, conversation_id, role, content)
        VALUES ($1,$2,'user',$3)`,
       [randomUUID(), conversationId, message]
-    );await pool.query(
-    `INSERT INTO conversations (id, user_id, title)
-     VALUES ($1,$2,$3) ON CONFLICT (id) DO NOTHING`,
-    [conversationId, userId, "Conversation"]
-  );
+    );
 
     let contents = [{ role: "user", parts: [{ text: message }] }];
     let round = 0;
