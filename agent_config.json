@@ -1,0 +1,154 @@
+{
+  "agent": {
+    "name": "Roger IA",
+    "version": "1.0.0",
+    "owner": "Roger Kouamé",
+    "organization": "RogWeb Service",
+    "language": "fr",
+    "system_prompt_file": "PROMPT_SYSTEME_ROGER_IA.md",
+    "autonomy_levels": {
+      "0": "conseil",
+      "1": "preparation",
+      "2": "execution_controlee",
+      "3": "autonomie",
+      "4": "autonomie_strategique_desactivee"
+    },
+    "default_autonomy_level": 1,
+    "max_autonomy_without_validation": 2
+  },
+  "llm_providers": {
+    "primary": {
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "use_case": "rapide_economique"
+    },
+    "routing_strategy": "single_provider"
+  },
+  "tools": [
+    {
+      "name": "create_task",
+      "description": "Créer une nouvelle tâche pour Roger avec titre, description, priorité et échéance.",
+      "autonomy_level": 2,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "string", "enum": ["basse", "moyenne", "haute", "urgente"] },
+          "due_date": { "type": "string", "format": "date-time" }
+        },
+        "required": ["title"]
+      }
+    },
+    {
+      "name": "update_task",
+      "description": "Mettre à jour le statut ou les détails d'une tâche existante.",
+      "autonomy_level": 2,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["a_faire", "en_cours", "terminee", "annulee"] },
+          "updates": { "type": "object" }
+        },
+        "required": ["task_id"]
+      }
+    },
+    {
+      "name": "list_tasks",
+      "description": "Lister les tâches selon un filtre (statut, priorité, échéance).",
+      "autonomy_level": 0,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "priority": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "qualify_prospect",
+      "description": "Rechercher et qualifier un prospect (score, secteur, potentiel).",
+      "autonomy_level": 1,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "company_name": { "type": "string" },
+          "context": { "type": "string" }
+        },
+        "required": ["company_name"]
+      }
+    },
+    {
+      "name": "create_reminder",
+      "description": "Programmer un rappel pour Roger à une date/heure précise.",
+      "autonomy_level": 2,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "remind_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["message", "remind_at"]
+      }
+    },
+    {
+      "name": "draft_message",
+      "description": "Préparer un brouillon d'email ou de message WhatsApp. Ne jamais envoyer automatiquement.",
+      "autonomy_level": 1,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": { "type": "string", "enum": ["email", "whatsapp"] },
+          "recipient": { "type": "string" },
+          "subject": { "type": "string" },
+          "body": { "type": "string" }
+        },
+        "required": ["channel", "body"]
+      }
+    },
+    {
+      "name": "log_activity",
+      "description": "Journaliser une action effectuée par l'agent pour audit.",
+      "autonomy_level": 0,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string" },
+          "details": { "type": "object" }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "save_memory",
+      "description": "Sauvegarder un fait durable en mémoire long terme, classé par domaine.",
+      "autonomy_level": 1,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": { "type": "string" },
+          "fact": { "type": "string" }
+        },
+        "required": ["domain", "fact"]
+      }
+    },
+    {
+      "name": "get_memory",
+      "description": "Récupérer les faits mémorisés pour un domaine donné.",
+      "autonomy_level": 0,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "security_rules": {
+    "never_expose_secrets": true,
+    "require_confirmation_above_level": 2,
+    "log_every_tool_call": true,
+    "max_tool_rounds_per_turn": 5
+  }
+}
