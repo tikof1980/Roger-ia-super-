@@ -19,8 +19,8 @@
   "llm_providers": {
     "primary": {
       "provider": "google",
-      "model": "gemini-3.0-flash
-      "use_case": "rapide_economique"
+      "model": "gemini-3.0-flash"
+      use_case": "rapide_economique"
     },
     "routing_strategy": "single_provider"
   },
