@@ -16,11 +16,11 @@
     "default_autonomy_level": 1,
     "max_autonomy_without_validation": 2
   },
-  "llm_providers": {
+"llm_providers": {
     "primary": {
       "provider": "google",
-      "model": "gemini-3.0-flash"
-      use_case": "rapide_economique"
+      "model": "gemini-3.0-flash",
+      "use_case": "rapide_economique"
     },
     "routing_strategy": "single_provider"
   },
